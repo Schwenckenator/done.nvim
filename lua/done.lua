@@ -156,6 +156,18 @@ local function send_to_bottom()
   vim.api.nvim_buf_set_lines(state.floating.buf, 0, -1, false, lines)
 end
 
+local function send_to_top()
+  local lines = vim.api.nvim_buf_get_lines(state.floating.buf, 0, -1, false)
+  local cursor = vim.api.nvim_win_get_cursor(state.floating.win)
+  local row = cursor[1]
+  local line = lines[row]
+
+  table.remove(lines, row)
+  table.insert(lines, 1, line)
+
+  vim.api.nvim_buf_set_lines(state.floating.buf, 0, -1, false, lines)
+end
+
 vim.api.nvim_create_user_command('DoneToggle', toggle_window, {})
 vim.api.nvim_create_user_command('DoneTaskDone', function()
   if vim.api.nvim_get_current_win() == state.floating.win then
@@ -163,14 +175,17 @@ vim.api.nvim_create_user_command('DoneTaskDone', function()
     send_to_bottom()
   end
 end, {})
+
 vim.api.nvim_create_user_command('DoneTaskForward', function()
   if vim.api.nvim_get_current_win() == state.floating.win then
     change_task_state '>'
   end
 end, {})
+
 vim.api.nvim_create_user_command('DoneTaskInProgress', function()
   if vim.api.nvim_get_current_win() == state.floating.win then
     change_task_state '/'
+    send_to_top()
   end
 end, {})
 

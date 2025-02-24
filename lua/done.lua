@@ -122,6 +122,8 @@ local function open_window()
   -- Task keymaps
   bound_keymap('n', 'ga', 'i' .. EMPTY_TASK)
   bound_keymap('n', 'gd', '<CMD>DoneTaskDone<CR>')
+  bound_keymap('n', 'gf', '<CMD>DoneTaskForward<CR>')
+  bound_keymap('n', 'gi', '<CMD>DoneTaskInProgress<CR>')
 end
 
 local function toggle_window()
@@ -171,8 +173,5 @@ vim.api.nvim_create_user_command('DoneTaskInProgress', function()
     change_task_state '/'
   end
 end, {})
-
-vim.keymap.set('n', '<leader>td', '<CMD>DoneToggle<CR>', { desc = 'Toggle Todolist', noremap = true })
-vim.keymap.set('n', '<leader>td', '<CMD>DoneToggle<CR>', { desc = 'Toggle Todolist', noremap = true })
 
 return M
